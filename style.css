@@ -1066,9 +1066,14 @@ body.dark-theme .dash-content {
 .menu-card:hover {
     transform: translateY(-8px) scale(1.03);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    border-color: var(--primary);
+    border-color: #0f172a; 
 }
 
+.dark-theme .menu-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border-color: cyan; 
+}
 .menu-card-icon {
     width: 65px;
     height: 65px;
