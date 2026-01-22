@@ -280,7 +280,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme') || 'colorful';
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-theme');
-
     }
     document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
     const themeBtn = document.querySelector(`.theme-btn.${savedTheme}`);
@@ -2021,7 +2020,7 @@ function loadProfile() {
                 <div class="page-content">
                     <div class="card">
                         <div style="text-align: center; margin-bottom: 2rem;">
-                            <div class="hi" style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 3rem; font-weight: 900; margin-bottom: 1rem;">
+                            <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 3rem; font-weight: 900; margin-bottom: 1rem;">
                                 ${currentUser.name.charAt(0)}
                             </div>
                             <h2>${currentUser.name}</h2>
@@ -2029,8 +2028,8 @@ function loadProfile() {
                         </div>
                         
                         <h3><i class="fas fa-info-circle"></i> Personal Information</h3>
-                        <div class="personal-info" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                            <div class="class-info" style="padding: 1rem; background: var(--bg-light); border-radius: 10px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                            <div style="padding: 1rem; background: var(--bg-light); border-radius: 10px;">
                                 <div style="color: var(--text-light); font-size: 0.8rem;">Class</div>
                                 <div style="font-weight: 600; margin-top: 0.3rem;">${currentUser.class}${currentUser.subject ? ' - ' + currentUser.subject : ''}</div>
                             </div>
@@ -2057,7 +2056,7 @@ function loadProfile() {
                         </div>
                         
                         <h3 style="margin-top: 2rem;"><i class="fas fa-home"></i> Address</h3>
-                        <div class="Address" style="padding: 1rem; background: var(--bg-light); border-radius: 10px; margin-top: 1rem;">
+                        <div style="padding: 1rem; background: var(--bg-light); border-radius: 10px; margin-top: 1rem;">
                             <p>${currentUser.address}</p>
                         </div>
                   
@@ -2521,118 +2520,36 @@ function loadEvents() {
     document.getElementById('eventsPage').innerHTML = html;
     console.log('🎉 Events loaded:', eventsDB.length);
 }
-// ================================================================
-// E-DIARY FUNCTION
-// ================================================================
 
-// ================================================================
-// E-DIARY FUNCTION - REDIRECTS TO ERP WEBSITE
-// Replace the existing loadEDiary() function in your script.js with this
-// ================================================================
+let eDiaryRedirecting = false;
 
 function loadEDiary() {
-    // Get student's class number (e.g., "3-A" → "3")
+    // Prevent double execution
+    if (eDiaryRedirecting) return;
+    eDiaryRedirecting = true;
+
     const classNum = parseInt(currentUser.class.split('-')[0]);
 
-    // Check if student is from class 3-9
     if (classNum >= 3 && classNum <= 9) {
-        // Log the redirect
-        if (window.LogSystem) {
-            LogSystem.info(
-                LogSystem.LogCategory.USER,
-                'E-Diary redirect to ERP',
-                {
-                    studentId: currentUser.id,
-                    studentName: currentUser.name,
-                    class: currentUser.class,
-                    targetUrl: 'https://erp.cvbokaro.in/ERP/STUDENTCORNER/IDiary.aspx'
-                }
-            );
-        }
+        showToast('Redirecting to E-Diary...', 'info', 1500);
 
-        // Show loading toast
-        showToast('Redirecting to E-Diary...', 'info', 2000);
-
-        // Redirect after a short delay
         setTimeout(() => {
             window.open('https://erp.cvbokaro.in/ERP/STUDENTCORNER/IDiary.aspx', '_blank');
+        }, 500);
 
-            // Go back to dashboard after opening the link
-            setTimeout(() => {
-                backToDashboard();
-            }, 500);
-        }, 1000);
+        setTimeout(() => {
+            backToDashboard();
+            eDiaryRedirecting = false; // Reset flag
+        }, 600);
 
     } else {
-        // Fallback for students not in class 3-9 (shouldn't happen with your data)
         showToast('E-Diary is only available for classes 3-9', 'warning');
         setTimeout(() => {
             backToDashboard();
+            eDiaryRedirecting = false; // Reset flag
         }, 2000);
     }
 }
-
-// ================================================================
-// ALTERNATIVE VERSION - Direct Immediate Redirect (No Delay)
-// Use this if you want instant redirect without any loading screen
-// ================================================================
-
-/*
-function loadEDiary() {
-    const classNum = parseInt(currentUser.class.split('-')[0]);
-    
-    if (classNum >= 3 && classNum <= 9) {
-        // Log the redirect
-        if (window.LogSystem) {
-            LogSystem.info(LogSystem.LogCategory.USER, 'E-Diary redirect', {
-                studentId: currentUser.id,
-                class: currentUser.class
-            });
-        }
-        
-        // Immediate redirect in new tab
-        window.open('https://erp.cvbokaro.in/ERP/STUDENTCORNER/IDiary.aspx', '_blank');
-        
-        // Return to dashboard
-        backToDashboard();
-    } else {
-        showToast('E-Diary is only available for classes 3-9', 'warning');
-        backToDashboard();
-    }
-}
-*/
-
-// ================================================================
-// THIRD OPTION - Redirect in Same Tab (Replace Current Page)
-// Use this if you want to replace the current page instead of new tab
-// ================================================================
-
-/*
-function loadEDiary() {
-    const classNum = parseInt(currentUser.class.split('-')[0]);
-    
-    if (classNum >= 3 && classNum <= 9) {
-        // Log the redirect
-        if (window.LogSystem) {
-            LogSystem.info(LogSystem.LogCategory.USER, 'E-Diary redirect', {
-                studentId: currentUser.id,
-                class: currentUser.class
-            });
-        }
-        
-        showToast('Redirecting to E-Diary...', 'info', 1500);
-        
-        setTimeout(() => {
-            window.location.href = 'https://erp.cvbokaro.in/ERP/STUDENTCORNER/IDiary.aspx';
-        }, 1500);
-    } else {
-        showToast('E-Diary is only available for classes 3-9', 'warning');
-        backToDashboard();
-    }
-}
-*/
-//alert-:
-// Modern & clean version that matches your second example's simplicity
 
 function showAlert(message) {
     const overlay = document.getElementById('custom-alert');
@@ -2956,64 +2873,3 @@ console.log('📍 Available routes:');
 console.log('   - #student-login, #teacher-login');
 console.log('   - #student-dashboard, #teacher-dashboard');
 console.log('   - #student-[page], #teacher-[page]');
-// ============================================================
-// SESSION PERSISTENCE FIX
-// ============================================================
-window.addEventListener('DOMContentLoaded', function() {
-    console.log('🔍 Checking for existing session...');
-    
-    if (currentUser && userType) {
-        console.log('✅ Session found:', currentUser.name, '| Type:', userType);
-        
-        document.getElementById('loginPage').classList.add('hidden');
-        
-        if (userType === 'student') {
-            showStudentDash();
-            if (!window.location.hash || window.location.hash.includes('login')) {
-                window.location.hash = 'student-dashboard';
-            }
-        } else {
-            showTeacherDash();
-            if (!window.location.hash || window.location.hash.includes('login')) {
-                window.location.hash = 'teacher-dashboard';
-            }
-        }
-    } else {
-        console.log('ℹ️ No session found');
-        if (!window.location.hash || !window.location.hash.includes('login')) {
-            window.location.hash = 'student-login';
-        }
-    }
-});
-
-// ============================================================
-// CROSS-TAB DATA SYNC (Materials & Homework visible to all)
-// ============================================================
-window.addEventListener('storage', function(e) {
-    if (e.key === 'materialsDB') {
-        materialsDB = loadFromCookie('materialsDB') || [];
-        console.log('📚 Materials synced from another tab');
-        if (document.getElementById('studyMaterialsPage') && 
-            document.getElementById('studyMaterialsPage').classList.contains('active')) {
-            loadMaterials('studyMaterials');
-        }
-    }
-    
-    if (e.key === 'homeworkDB') {
-        homeworkDB = loadFromCookie('homeworkDB') || [];
-        console.log('📝 Homework synced from another tab');
-        if (document.getElementById('homeworkPage') && 
-            document.getElementById('homeworkPage').classList.contains('active')) {
-            loadHomework('homework');
-        }
-    }
-    
-    if (e.key === 'assignmentsDB') {
-        assignmentsDB = loadFromCookie('assignmentsDB') || [];
-        console.log('📋 Assignments synced from another tab');
-    }
-});
-
-
-console.log('✅ Session auto-login enabled!');
-console.log('✅ Cross-tab sync enabled!');
