@@ -85,10 +85,7 @@ body {
     transition: var(--transition-base);
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, var(--secondary), var(--primary));
-    border-width: 1px;
-}
+
 
 /* SCROLL PROGRESS BAR */
 .scroll-progress {
