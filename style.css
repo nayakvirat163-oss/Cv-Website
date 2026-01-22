@@ -24,9 +24,9 @@ body {
 /* CSS VARIABLES */
 :root {
     /* --primary: #667eea; */
-    --primary: #28378a ;
+    --primary: #28378a;
     /* --secondary: #764ba2; */
-    --secondary : #38f9d7;
+    --secondary: #38f9d7;
     --tertiary: #a629b4;
     --success: #10b981;
     --danger: #ef4444;
@@ -728,7 +728,7 @@ body.dark-theme .login-box {
 }
 
 .user-type-btn.active {
-    background: linear-gradient(135deg, #059669,#3b82f6);
+    background: linear-gradient(135deg, #059669, #3b82f6);
     color: white;
     border-color: transparent;
 }
@@ -1066,14 +1066,15 @@ body.dark-theme .dash-content {
 .menu-card:hover {
     transform: translateY(-8px) scale(1.03);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    border-color: #0f172a; 
+    border-color: #0f172a;
 }
 
 .dark-theme .menu-card:hover {
     transform: translateY(-8px) scale(1.03);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    border-color: cyan; 
+    border-color: cyan;
 }
+
 .menu-card-icon {
     width: 65px;
     height: 65px;
@@ -1605,17 +1606,20 @@ body.dark-theme .modal-content h2 {
 .login-box {
     /* Reduced vertical padding significantly */
     padding: 1.6rem 1.8rem 1.2rem !important;
-    
+
     /* Smaller width → looks more focused and modern */
-    max-width: 340px !important;          /* was 380px → now noticeably narrower */
-    width: 85% !important;                /* was 90% → tighter on sides */
-    
+    max-width: 340px !important;
+    /* was 380px → now noticeably narrower */
+    width: 85% !important;
+    /* was 90% → tighter on sides */
+
     /* Less bottom margin so it doesn't take much vertical space */
-    margin-bottom: 15px !important;       /* was 40px → much closer to bottom */
-    
+    margin-bottom: 15px !important;
+    /* was 40px → much closer to bottom */
+
     /* Slightly smaller border-radius for a more compact feel */
     border-radius: 18px;
-    
+
     /* Keep nice shadow but slightly softer */
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
 }
@@ -1624,45 +1628,53 @@ body.dark-theme .modal-content h2 {
 .logo-3d {
     width: 90px !important;
     height: 90px !important;
-    margin: 0 auto 0.6rem !important;     /* reduced from 1rem */
+    margin: 0 auto 0.6rem !important;
+    /* reduced from 1rem */
 }
 
 .om-inner {
-    font-size: 2.6rem !important;         /* was ~3.2rem */
+    font-size: 2.6rem !important;
+    /* was ~3.2rem */
 }
 
 /* School name – smaller and tighter */
 .school-name h1 {
-    font-size: 1.55rem !important;        /* was 1.8rem → now smaller */
+    font-size: 1.55rem !important;
+    /* was 1.8rem → now smaller */
     margin-bottom: 0.25rem !important;
     line-height: 1.1;
 }
 
 .school-name p {
-    font-size: 0.78rem !important;        /* was 0.85rem */
+    font-size: 0.78rem !important;
+    /* was 0.85rem */
     letter-spacing: 2.5px;
     margin-top: 0.1rem;
 }
 
 /* User type buttons – more compact */
 .user-type-selector {
-    margin: 0.9rem 0 !important;          /* was 1.3rem 0 */
+    margin: 0.9rem 0 !important;
+    /* was 1.3rem 0 */
     gap: 0.5rem !important;
 }
 
 .user-type-btn {
-    padding: 0.85rem 0.5rem !important;   /* was 1rem */
+    padding: 0.85rem 0.5rem !important;
+    /* was 1rem */
     font-size: 0.84rem !important;
     border-radius: 14px;
 }
 
 .user-type-btn i {
-    font-size: 1.4rem !important;         /* slightly smaller icons */
+    font-size: 1.4rem !important;
+    /* slightly smaller icons */
 }
 
 /* Form fields – tighter spacing */
 .form-group {
-    margin-bottom: 0.8rem !important;     /* was 1rem */
+    margin-bottom: 0.8rem !important;
+    /* was 1rem */
 }
 
 .form-group label {
@@ -1671,14 +1683,16 @@ body.dark-theme .modal-content h2 {
 }
 
 .form-group input {
-    padding: 0.75rem 1rem !important;     /* was 0.9rem 1.1rem */
+    padding: 0.75rem 1rem !important;
+    /* was 0.9rem 1.1rem */
     font-size: 0.9rem !important;
     border-radius: 10px;
 }
 
 /* Login button – slightly smaller */
 .btn.btn-primary {
-    padding: 0.8rem !important;           /* was 0.95rem */
+    padding: 0.8rem !important;
+    /* was 0.95rem */
     font-size: 0.9rem !important;
     border-radius: 10px;
 }
@@ -1691,17 +1705,17 @@ body.dark-theme .modal-content h2 {
         width: 88% !important;
         margin-bottom: 10px !important;
     }
-    
+
     .logo-3d {
         width: 80px !important;
         height: 80px !important;
         margin-bottom: 0.5rem !important;
     }
-    
+
     .om-inner {
         font-size: 2.3rem !important;
     }
-    
+
     .school-name h1 {
         font-size: 1.45rem !important;
     }
@@ -1873,7 +1887,8 @@ body.dark-theme .youtube-button:hover {
 /* Overlay background */
 /* Recommended CSS (very similar to your second example) */
 .alert-overlay {
-    display: none;           /* ← important: we control with display */
+    display: none;
+    /* ← important: we control with display */
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
@@ -1883,7 +1898,8 @@ body.dark-theme .youtube-button:hover {
 }
 
 .alert-overlay:not(.alert-hidden) {
-    display: flex;           /* ← shows when we remove .alert-hidden */
+    display: flex;
+    /* ← shows when we remove .alert-hidden */
 }
 
 .alert-box {
@@ -1893,7 +1909,7 @@ body.dark-theme .youtube-button:hover {
     border-radius: 10px;
     width: 320px;
     max-width: 85%;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     text-align: center;
     animation: popIn 0.25s ease;
 }
@@ -1915,11 +1931,18 @@ body.dark-theme .youtube-button:hover {
 }
 
 @keyframes popIn {
-    from { opacity: 0; transform: scale(0.92); }
-    to   { opacity: 1; transform: scale(1);    }
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
-.footer-content{
+.footer-content {
     display: flex;
     justify-content: center;
 }
@@ -1927,3 +1950,13 @@ body.dark-theme .youtube-button:hover {
 #line {
     height: 20px;
 }
+
+
+
+
+
+body.dark-theme .card div[style*="background: var(--bg-light)"] {
+    background: #0f172a !important;
+    border: 1px solid #334155;
+}
+
