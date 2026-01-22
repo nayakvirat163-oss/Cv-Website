@@ -280,6 +280,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme') || 'colorful';
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-theme');
+
     }
     document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
     const themeBtn = document.querySelector(`.theme-btn.${savedTheme}`);
@@ -2020,7 +2021,7 @@ function loadProfile() {
                 <div class="page-content">
                     <div class="card">
                         <div style="text-align: center; margin-bottom: 2rem;">
-                            <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 3rem; font-weight: 900; margin-bottom: 1rem;">
+                            <div class="hi" style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: inline-flex; align-items: center; justify-content: center; color: white; font-size: 3rem; font-weight: 900; margin-bottom: 1rem;">
                                 ${currentUser.name.charAt(0)}
                             </div>
                             <h2>${currentUser.name}</h2>
@@ -2028,8 +2029,8 @@ function loadProfile() {
                         </div>
                         
                         <h3><i class="fas fa-info-circle"></i> Personal Information</h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
-                            <div style="padding: 1rem; background: var(--bg-light); border-radius: 10px;">
+                        <div class="personal-info" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                            <div class="class-info" style="padding: 1rem; background: var(--bg-light); border-radius: 10px;">
                                 <div style="color: var(--text-light); font-size: 0.8rem;">Class</div>
                                 <div style="font-weight: 600; margin-top: 0.3rem;">${currentUser.class}${currentUser.subject ? ' - ' + currentUser.subject : ''}</div>
                             </div>
@@ -2056,7 +2057,7 @@ function loadProfile() {
                         </div>
                         
                         <h3 style="margin-top: 2rem;"><i class="fas fa-home"></i> Address</h3>
-                        <div style="padding: 1rem; background: var(--bg-light); border-radius: 10px; margin-top: 1rem;">
+                        <div class="Address" style="padding: 1rem; background: var(--bg-light); border-radius: 10px; margin-top: 1rem;">
                             <p>${currentUser.address}</p>
                         </div>
                   
@@ -3012,6 +3013,7 @@ window.addEventListener('storage', function(e) {
         console.log('📋 Assignments synced from another tab');
     }
 });
+
 
 console.log('✅ Session auto-login enabled!');
 console.log('✅ Cross-tab sync enabled!');
