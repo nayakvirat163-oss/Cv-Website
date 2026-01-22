@@ -256,10 +256,10 @@ Overall, roughly **50%** of the code was AI-generated and **50%** was handcrafte
 
 ### Who Built It
 
-- **Aditya** – worked on ideas, structure, and UI adjustments.  
-- **Aarav** – helped with flows, testing, and polishing interactions.  
-- **Virat** – supported data design and feature behaviour.  
-- **Vaidik** – contributed to styling and feature tweaking.  
+- **Aditya**
+- **Aarav**
+- **Virat** 
+- **Vaidik**
 
 Together, **Aditya, Aarav, Virat, and Vaidik** used AI as a helper, not a replacement. They wrote and edited a large part of the code themselves.
 
