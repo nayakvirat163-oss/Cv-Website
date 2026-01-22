@@ -2689,3 +2689,329 @@ console.log('✅ Developer tools shortcuts: Disabled');
 console.log('✅ Text selection: Limited');
 console.log('✅ Copy/Paste: Limited');
 console.log('✅ Source viewing: Disabled');
+// ========================================
+// MINIMAL URL ROUTING - Add to end of script.js
+// ========================================
+
+// Store original functions
+const _originalHandleLogin = handleLogin;
+const _originalLogout = logout;
+const _originalOpenPage = openPage;
+const _originalBackToDashboard = backToDashboard;
+const _originalSelectUserType = selectUserType;
+
+// Enhanced selectUserType with routing
+selectUserType = function(type) {
+    userType = type;
+    document.querySelectorAll('.user-type-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    console.log('📋 User type selected:', type);
+    
+    // Update URL when switching user type
+    if (!currentUser) {
+        window.history.replaceState(null, '', '#' + type + '-login');
+    }
+};
+
+// Enhanced handleLogin with routing
+handleLogin = function(e) {
+    e.preventDefault();
+    
+    const userId = document.getElementById('userId').value.trim();
+    const password = document.getElementById('password').value;
+    
+    console.log('🔐 Login attempt:', userId, userType);
+    
+    let user = userType === 'student' ? studentDB[userId] : teacherDB[userId];
+    
+    if (user && user.password === password) {
+        currentUser = { id: userId, ...user };
+        saveToCookie('currentUser', currentUser);
+        saveToCookie('userType', userType);
+        
+        console.log('✅ Login successful:', currentUser.name);
+        showToast('✅ Login successful! Redirecting...', 'success');
+        
+        setTimeout(() => {
+            document.getElementById('loginPage').classList.add('hidden');
+            if (userType === 'student') {
+                showStudentDash();
+                window.location.hash = 'student-dashboard';
+            } else {
+                showTeacherDash();
+                window.location.hash = 'teacher-dashboard';
+            }
+            showToast(`Welcome, ${currentUser.name}!`, 'success');
+            updateScrollProgress();
+        }, 1000);
+    } else {
+        console.error('❌ Login failed');
+        showToast('❌ Invalid credentials! Please try again.', 'error');
+    }
+};
+
+// Enhanced logout with routing
+logout = function() {
+    if (confirm('Are you sure you want to logout?')) {
+        console.log('👋 Logging out:', currentUser.name);
+        const wasTeacher = userType === 'teacher';
+        currentUser = null;
+        deleteCookie('currentUser');
+        deleteCookie('userType');
+        document.getElementById('studentDashboard').classList.add('hidden');
+        document.getElementById('teacherDashboard').classList.add('hidden');
+        document.querySelectorAll('.full-page').forEach(p => p.classList.remove('active'));
+        document.getElementById('loginPage').classList.remove('hidden');
+        document.getElementById('userId').value = '';
+        document.getElementById('password').value = '';
+        showToast('Logged out successfully', 'success');
+        console.log('✅ Logout complete');
+        
+        window.location.hash = wasTeacher ? 'teacher-login' : 'student-login';
+    }
+};
+
+// Enhanced openPage with routing
+openPage = function(page) {
+    console.log('📄 Opening page:', page);
+    document.getElementById('studentDashboard').classList.add('hidden');
+    document.getElementById('teacherDashboard').classList.add('hidden');
+    document.getElementById(page + 'Page').classList.add('active');
+    
+    // Update URL based on page
+    const prefix = userType === 'student' ? 'student' : 'teacher';
+    const urlMap = {
+        'timetable': 'timetable',
+        'myTimetable': 'timetable',
+        'markAttendance': 'mark-attendance',
+        'attendance': 'attendance',
+        'results': 'results',
+        'homework': 'homework',
+        'studyMaterials': 'study-materials',
+        'createAssignment': 'create-assignment',
+        'assignments': 'assignments',
+        'uploadMaterials': 'upload-materials',
+        'assignHomework': 'assign-homework',
+        'enterMarks': 'enter-marks',
+        'events': 'events',
+        'announcements': 'announcements',
+        'certificates': 'certificates',
+        'profile': 'profile',
+        'viewReports': 'view-reports',
+        'teacherProfile': 'profile',
+        'library': 'library',
+        'feePayment': 'fee-payment',
+        'eDiary': 'ediary',
+        'importStudents': 'import-students'
+    };
+    
+    const urlName = urlMap[page] || page;
+    window.location.hash = prefix + '-' + urlName;
+    
+    const pageLoaders = {
+        'timetable': loadTimetable,
+        'myTimetable': loadTeacherTimetable,
+        'markAttendance': loadMarkAttendance,
+        'attendance': loadStudentAttendance,
+        'results': loadStudentResults,
+        'homework': loadHomework,
+        'studyMaterials': loadMaterials,
+        'createAssignment': loadCreateAssignment,
+        'assignments': loadStudentAssignments,
+        'uploadMaterials': loadUploadMaterials,
+        'assignHomework': loadAssignHomework,
+        'enterMarks': loadEnterMarks,
+        'events': loadEvents,
+        'announcements': loadAnnouncements,
+        'certificates': loadCertificates,
+        'profile': loadProfile,
+        'viewReports': loadViewReports,
+        'teacherProfile': loadTeacherProfile,
+        'library': loadGenericPage,
+        'feePayment': loadGenericPage,
+        'eDiary': loadEDiary,
+    };
+    
+    if (pageLoaders[page]) {
+        pageLoaders[page](page);
+    } else {
+        loadGenericPage(page);
+    }
+    
+    updateScrollProgress();
+    document.getElementById('scrollProgress').style.width = '0%';
+};
+
+// Enhanced backToDashboard with routing
+backToDashboard = function() {
+    console.log('🏠 Returning to dashboard');
+    document.querySelectorAll('.full-page').forEach(p => p.classList.remove('active'));
+    if (userType === 'student') {
+        document.getElementById('studentDashboard').classList.remove('hidden');
+        window.location.hash = 'student-dashboard';
+    } else {
+        document.getElementById('teacherDashboard').classList.remove('hidden');
+        window.location.hash = 'teacher-dashboard';
+    }
+    updateScrollProgress();
+    document.getElementById('scrollProgress').style.width = '0%';
+};
+
+// Handle browser back/forward buttons
+window.addEventListener('hashchange', function() {
+    const hash = window.location.hash.slice(1);
+    
+    if (!hash) {
+        window.location.hash = 'student-login';
+        return;
+    }
+    
+    console.log('Hash changed to:', hash);
+    
+    // If on login page, just select the right user type
+    if (hash === 'student-login' || hash === 'teacher-login') {
+        const type = hash.replace('-login', '');
+        if (!document.getElementById('loginPage').classList.contains('hidden')) {
+            // Already on login page, just switch user type
+            const btn = document.querySelector(`.user-type-btn[onclick*="${type}"]`);
+            if (btn) btn.click();
+        }
+        return;
+    }
+    
+    // Check if user is logged in
+    if (!currentUser) {
+        window.location.hash = 'student-login';
+        return;
+    }
+    
+    // Handle dashboard
+    if (hash === 'student-dashboard' || hash === 'teacher-dashboard') {
+        const dashType = hash.replace('-dashboard', '');
+        if (userType !== dashType) {
+            window.location.hash = userType + '-dashboard';
+            return;
+        }
+        backToDashboard();
+        return;
+    }
+    
+    // Handle pages
+    if (hash.startsWith('student-') || hash.startsWith('teacher-')) {
+        const parts = hash.split('-');
+        const hashType = parts[0];
+        
+        if (userType !== hashType) {
+            window.location.hash = userType + '-dashboard';
+            return;
+        }
+        
+        const pageMap = {
+            'timetable': userType === 'student' ? 'timetable' : 'myTimetable',
+            'mark-attendance': 'markAttendance',
+            'attendance': 'attendance',
+            'results': 'results',
+            'homework': 'homework',
+            'study-materials': 'studyMaterials',
+            'create-assignment': 'createAssignment',
+            'assignments': 'assignments',
+            'upload-materials': 'uploadMaterials',
+            'assign-homework': 'assignHomework',
+            'enter-marks': 'enterMarks',
+            'events': 'events',
+            'announcements': 'announcements',
+            'certificates': 'certificates',
+            'profile': userType === 'student' ? 'profile' : 'teacherProfile',
+            'view-reports': 'viewReports',
+            'library': 'library',
+            'fee-payment': 'feePayment',
+            'ediary': 'eDiary',
+            'import-students': 'importStudents'
+        };
+        
+        const pageName = parts.slice(1).join('-');
+        const internalPage = pageMap[pageName];
+        
+        if (internalPage) {
+            _originalOpenPage(internalPage);
+        }
+    }
+});
+
+// Initialize on page load
+window.addEventListener('DOMContentLoaded', function() {
+    // Set initial hash if none exists
+    if (!window.location.hash) {
+        if (currentUser) {
+            window.location.hash = userType + '-dashboard';
+        } else {
+            window.location.hash = 'student-login';
+        }
+    }
+});
+
+console.log('✅ URL Routing Enabled!');
+console.log('📍 Available routes:');
+console.log('   - #student-login, #teacher-login');
+console.log('   - #student-dashboard, #teacher-dashboard');
+console.log('   - #student-[page], #teacher-[page]');
+// ============================================================
+// SESSION PERSISTENCE FIX
+// ============================================================
+window.addEventListener('DOMContentLoaded', function() {
+    console.log('🔍 Checking for existing session...');
+    
+    if (currentUser && userType) {
+        console.log('✅ Session found:', currentUser.name, '| Type:', userType);
+        
+        document.getElementById('loginPage').classList.add('hidden');
+        
+        if (userType === 'student') {
+            showStudentDash();
+            if (!window.location.hash || window.location.hash.includes('login')) {
+                window.location.hash = 'student-dashboard';
+            }
+        } else {
+            showTeacherDash();
+            if (!window.location.hash || window.location.hash.includes('login')) {
+                window.location.hash = 'teacher-dashboard';
+            }
+        }
+    } else {
+        console.log('ℹ️ No session found');
+        if (!window.location.hash || !window.location.hash.includes('login')) {
+            window.location.hash = 'student-login';
+        }
+    }
+});
+
+// ============================================================
+// CROSS-TAB DATA SYNC (Materials & Homework visible to all)
+// ============================================================
+window.addEventListener('storage', function(e) {
+    if (e.key === 'materialsDB') {
+        materialsDB = loadFromCookie('materialsDB') || [];
+        console.log('📚 Materials synced from another tab');
+        if (document.getElementById('studyMaterialsPage') && 
+            document.getElementById('studyMaterialsPage').classList.contains('active')) {
+            loadMaterials('studyMaterials');
+        }
+    }
+    
+    if (e.key === 'homeworkDB') {
+        homeworkDB = loadFromCookie('homeworkDB') || [];
+        console.log('📝 Homework synced from another tab');
+        if (document.getElementById('homeworkPage') && 
+            document.getElementById('homeworkPage').classList.contains('active')) {
+            loadHomework('homework');
+        }
+    }
+    
+    if (e.key === 'assignmentsDB') {
+        assignmentsDB = loadFromCookie('assignmentsDB') || [];
+        console.log('📋 Assignments synced from another tab');
+    }
+});
+
+console.log('✅ Session auto-login enabled!');
+console.log('✅ Cross-tab sync enabled!');
